@@ -1,28 +1,16 @@
-import sqlite3
-
-# Initialize or connect to the database
-conn = sqlite3.connect('listOfTasks.db')
-cursor = conn.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS tasks (title TEXT)')
-
-# Fetch all tasks into memory
-def retrieve_tasks():
-    cursor.execute('SELECT title FROM tasks')
-    return [row[0] for row in cursor.fetchall()]
+tasks = []
 
 # Add a new task
 def add_task():
     task = input("Enter a new task: ").strip()
     if task:
-        cursor.execute('INSERT INTO tasks VALUES (?)', (task,))
-        conn.commit()
+        tasks.append(task)
         print("Task added!")
     else:
         print("Empty task. Nothing added.")
 
-# View tasks
+# View all tasks
 def view_tasks():
-    tasks = retrieve_tasks()
     if tasks:
         print("\n--- To-Do List ---")
         for i, task in enumerate(tasks, start=1):
@@ -33,14 +21,12 @@ def view_tasks():
 # Delete a specific task
 def delete_task():
     view_tasks()
-    tasks = retrieve_tasks()
     if tasks:
         try:
             task_num = int(input("Enter task number to delete: "))
             if 1 <= task_num <= len(tasks):
-                cursor.execute('DELETE FROM tasks WHERE title = ?', (tasks[task_num - 1],))
-                conn.commit()
-                print("Task deleted.")
+                removed = tasks.pop(task_num - 1)
+                print(f"Task '{removed}' deleted.")
             else:
                 print("Invalid task number.")
         except ValueError:
@@ -52,8 +38,7 @@ def delete_task():
 def delete_all_tasks():
     confirm = input("Are you sure you want to delete all tasks? (yes/no): ").strip().lower()
     if confirm == "yes":
-        cursor.execute('DELETE FROM tasks')
-        conn.commit()
+        tasks.clear()
         print("All tasks deleted.")
     else:
         print("Cancelled.")
@@ -87,4 +72,3 @@ def menu():
 # Run the program
 if __name__ == "__main__":
     menu()
-    conn.close()
