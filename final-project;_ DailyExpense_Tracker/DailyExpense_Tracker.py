@@ -217,19 +217,24 @@ class ExpenseApp:
 
     # ---------------- Reports ----------------
    # ---------------- Reports ----------------
-def setup_report_tab(self):
-    tk.Label(self.tab_report, text="Expense Reports", 
+    def setup_report_tab(self):
+        tk.Label(self.tab_report, text="Expense Reports", 
              font=("Arial", 18, "bold"), 
              bg="#f5f6fa", fg="#2c3e50").pack(pady=20)
 
-    tk.Button(self.tab_report, 
+        tk.Button(self.tab_report, 
               text="Show Pie Chart", 
               command=lambda: self.reporter.generate_chart("pie"), 
               bg="#8e44ad", fg="white", 
               font=("Arial", 12, "bold")).pack(pady=10)
 
-    tk.Button(self.tab_report, 
+        tk.Button(self.tab_report, 
               text="Show Bar Chart", 
               command=lambda: self.reporter.generate_chart("bar"), 
               bg="#16a085", fg="white", 
               font=("Arial", 12, "bold")).pack(pady=10)
+        
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ExpenseApp(root)
+    root.mainloop()
